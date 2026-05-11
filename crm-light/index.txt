@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Recursos Corporativos</title>
+    <!-- Include Tailwind CSS for rapid UI development -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Canvas Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
+   <!-- Favicon -->
+    <link rel="icon" href="https://cdn.shopify.com/s/files/1/0242/0175/6777/files/logo-animation-bebell-1.gif?v=1777437988">
+
+
+
+
+
+    
+    <script>
+        // Inject the requested custom color palette into Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sys: {
+                            bg: '#ffffff',       // Changed to white
+                            header: '#29225b',   // New header color
+                            primary: '#8b84f5',
+                            secondary: '#e07dd1',
+                            title: '#4b4998',
+                            text: '#4b5563',     // Darkened text slightly for better readability on white
+                            card: '#ffffff',
+                            border: '#e5e7eb'    // Added border color for separation
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles to ensure full height and hide scrollbars where unnecessary */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        /* Smooth transitions for the modal */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms ease-out, transform 300ms ease-out;
+        }
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 200ms ease-in, transform 200ms ease-in;
+        }
+        
+        /* Custom scrollbar for the rest of the app if needed */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b84f5; }
+    </style>
+</head>
+<body class="bg-sys-bg text-sys-text flex flex-col font-sans">
+
+    <!-- Header / Navbar -->
+    <header class="bg-sys-header shadow-md h-16 flex items-center justify-between px-6 shrink-0 z-10">
+        <div class="flex items-center gap-3">
+            <!-- Drive Icon -->
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd21ebfe102c05e039883d63589e41f50f515b0.png" alt="Logo de la Aplicación" class="h-8 w-auto object-contain">
+            <h1 class="text-white font-bold text-xl tracking-tight" data-i18n="appTitle">Recursos Corporativos</h1>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <!-- Open in Drive Button -->
+            <a id="openInDriveBtn" href="#" target="_blank" class="hidden items-center gap-2 px-4 py-2 rounded-lg bg-white text-sys-header hover:bg-gray-100 transition-colors duration-200 font-medium text-sm shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                <span data-i18n="openEdit">Abrir para Editar</span>
+            </a>
+            <!-- Settings Button -->
+            <button id="settingsBtn" class="flex items-center gap-2 px-4 py-2 rounded-lg text-white/90 hover:bg-white/10 hover:text-white transition-colors duration-200 font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span data-i18n="settings">Configuración</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="flex-1 relative flex items-center justify-center w-full h-full">
+        
+        <!-- Empty State (Shown when no folder is loaded) -->
+        <div id="emptyState" class="text-center px-6 max-w-md">
+            <div class="bg-sys-card p-6 rounded-full inline-flex mb-6 shadow-sm border border-sys-border">
+                <svg class="w-16 h-16 text-sys-secondary opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-sys-title mb-3" data-i18n="emptyTitle">Ninguna Carpeta Conectada</h2>
+            <p class="text-sys-text mb-8" data-i18n="emptyDesc">Integra tu carpeta de Google Drive para acceder y ver tus archivos directamente desde este panel.</p>
+            <button id="connectEmptyBtn" class="bg-sys-primary hover:bg-[#746ce0] text-white px-6 py-3 rounded-xl font-medium shadow-md shadow-sys-primary/30 transition-all transform hover:-translate-y-0.5" data-i18n="connectBtn">
+                Conectar Carpeta de Drive
+            </button>
+        </div>
+
+        <!-- Google Drive iFrame container -->
+        <iframe 
+            id="driveFrame" 
+            class="absolute inset-0 w-full h-full hidden border-0" 
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </main>
+
+    <!-- Settings / Setup Modal Overlay -->
+    <div id="modalOverlay" class="fixed inset-0 bg-sys-title/30 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        
+        <!-- Modal Card -->
+        <div id="modalCard" class="bg-sys-card p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-4 modal-enter border border-sys-border">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-2xl font-bold text-sys-title" data-i18n="modalTitle">Configuración de Carpeta</h3>
+                <button id="closeModalBtn" class="text-sys-text hover:text-sys-secondary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <p class="text-sys-text text-sm mb-6" data-i18n="modalDesc">Ingresa la URL de la carpeta de Google Drive que deseas integrar. Asegúrate de que la configuración de uso compartido permita que "Cualquier persona con el enlace" pueda verla.</p>
+            
+            <div class="mb-5">
+                <label for="driveUrl" class="block text-sm font-semibold text-sys-title mb-2" data-i18n="inputLabel">URL de la Carpeta de Google Drive</label>
+                <input 
+                    type="url" 
+                    id="driveUrl" 
+                    data-i18n-placeholder="inputPlaceholder"
+                    placeholder="https://drive.google.com/drive/folders/..." 
+                    class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-sys-border focus:border-sys-primary focus:bg-white focus:ring-2 focus:ring-sys-primary/20 outline-none text-sys-title transition-all placeholder:text-sys-text/50"
+                >
+                <div class="flex justify-between items-start mt-2">
+                    <p id="errorMessage" class="text-red-500 text-sm hidden" data-i18n="errorMsg">URL no válida. Por favor, ingresa un enlace válido a una carpeta de Google Drive.</p>
+                    <button id="openVideoBtn" type="button" class="text-sm text-sys-primary hover:text-sys-secondary font-medium transition-colors ml-auto flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        <span data-i18n="videoTutorial">Ver tutorial paso a paso</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8">
+                <button id="cancelBtn" class="px-5 py-2.5 rounded-xl font-medium text-sys-text hover:bg-gray-100 transition-colors" data-i18n="cancel">
+                    Cancelar
+                </button>
+                <button id="saveBtn" class="px-6 py-2.5 rounded-xl font-medium text-white bg-sys-primary hover:bg-[#746ce0] shadow-md shadow-sys-primary/20 transition-colors" data-i18n="save">
+                    Integrar Carpeta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Tutorial Modal Overlay -->
+    <div id="videoModalOverlay" class="fixed inset-0 bg-sys-title/80 backdrop-blur-sm z-[60] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div id="videoModalCard" class="bg-sys-card p-2 rounded-2xl shadow-2xl w-full max-w-4xl mx-4 modal-enter relative">
+            <button id="closeVideoBtn" class="absolute -top-12 right-0 text-white hover:text-sys-secondary transition-colors" aria-label="Cerrar video" data-i18n-aria="closeVideo">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
+                <iframe id="tutorialVideo" class="w-full h-full" src="" title="Video Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ==========================================
+        // 🌍 LOCALIZATION & TRANSLATIONS LOGIC
+        // ==========================================
+        const DICTIONARY = {
+            es: {
+                appTitle: "Recursos Corporativos",
+                openEdit: "Abrir para Editar",
+                settings: "Configuración",
+                emptyTitle: "Ninguna Carpeta Conectada",
+                emptyDesc: "Integra tu carpeta de Google Drive para acceder y ver tus archivos directamente desde este panel.",
+                connectBtn: "Conectar Carpeta de Drive",
+                modalTitle: "Configuración de Carpeta",
+                modalDesc: "Ingresa la URL de la carpeta de Google Drive que deseas integrar. Asegúrate de que la configuración de uso compartido permita que \"Cualquier persona con el enlace\" pueda verla.",
+                inputLabel: "URL de la Carpeta de Google Drive",
+                inputPlaceholder: "https://drive.google.com/drive/folders/...",
+                errorMsg: "URL no válida. Por favor, ingresa un enlace válido a una carpeta de Google Drive.",
+                videoTutorial: "Ver tutorial paso a paso",
+                cancel: "Cancelar",
+                save: "Integrar Carpeta",
+                closeVideo: "Cerrar video"
+            },
+            en: {
+                appTitle: "Corporate Resources",
+                openEdit: "Open to Edit",
+                settings: "Settings",
+                emptyTitle: "No Folder Connected",
+                emptyDesc: "Integrate your Google Drive folder to access and view your files directly from this dashboard.",
+                connectBtn: "Connect Drive Folder",
+                modalTitle: "Folder Settings",
+                modalDesc: "Enter the URL of the Google Drive folder you want to integrate. Make sure the sharing settings allow \"Anyone with the link\" to view it.",
+                inputLabel: "Google Drive Folder URL",
+                inputPlaceholder: "https://drive.google.com/drive/folders/...",
+                errorMsg: "Invalid URL. Please enter a valid Google Drive folder link.",
+                videoTutorial: "Watch step-by-step tutorial",
+                cancel: "Cancel",
+                save: "Integrate Folder",
+                closeVideo: "Close video"
+            }
+        };
+
+        // Determine language from URL (e.g., ?lang=en). Defaults to Spanish ('es')
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentLang = urlParams.get('lang') === 'en' ? 'en' : 'es';
+
+        function applyTranslations(lang) {
+            document.getElementById('htmlTag').setAttribute('lang', lang);
+            document.getElementById('pageTitle').textContent = DICTIONARY[lang].appTitle;
+            
+            // Apply text translations
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (DICTIONARY[lang][key]) {
+                    el.textContent = DICTIONARY[lang][key];
+                }
+            });
+
+            // Apply placeholder translations
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (DICTIONARY[lang][key]) {
+                    el.placeholder = DICTIONARY[lang][key];
+                }
+            });
+
+            // Apply ARIA label translations
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+                const key = el.getAttribute('data-i18n-aria');
+                if (DICTIONARY[lang][key]) {
+                    el.setAttribute('aria-label', DICTIONARY[lang][key]);
+                }
+            });
+        }
+
+        // Apply translations immediately upon script load
+        applyTranslations(currentLang);
+
+
+        // ==========================================
+        // ☁️ FIREBASE & APP LOGIC
+        // ==========================================
+        let firebaseConfig = {};
+        try { firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}'); } catch(e) {}
+        
+        const app = Object.keys(firebaseConfig).length > 0 ? initializeApp(firebaseConfig) : null;
+        const auth = app ? getAuth(app) : null;
+        const db = app ? getFirestore(app) : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let currentUser = null;
+
+        // DOM Elements
+        const settingsBtn = document.getElementById('settingsBtn');
+        const openInDriveBtn = document.getElementById('openInDriveBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalCard = document.getElementById('modalCard');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const driveUrlInput = document.getElementById('driveUrl');
+        const errorMessage = document.getElementById('errorMessage');
+        const emptyState = document.getElementById('emptyState');
+        const driveFrame = document.getElementById('driveFrame');
+        const connectEmptyBtn = document.getElementById('connectEmptyBtn');
+        
+        const openVideoBtn = document.getElementById('openVideoBtn');
+        const videoModalOverlay = document.getElementById('videoModalOverlay');
+        const videoModalCard = document.getElementById('videoModalCard');
+        const closeVideoBtn = document.getElementById('closeVideoBtn');
+        const tutorialVideo = document.getElementById('tutorialVideo');
+
+        let currentFolderId = null;
+
+        // Initialize Authentication & Load Data
+        async function init() {
+            if (!auth || !db) {
+                // Fallback for standalone usage without cloud storage
+                if (!currentFolderId) openModal();
+                return;
+            }
+
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Error de autenticación:", error);
+                openModal();
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                currentUser = user;
+                if (user) {
+                    await loadSavedFolder();
+                }
+            });
+        }
+
+        async function loadSavedFolder() {
+            if (!db || !currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'drive');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists() && docSnap.data().folderId) {
+                    currentFolderId = docSnap.data().folderId;
+                    driveUrlInput.value = `https://drive.google.com/drive/folders/${currentFolderId}`;
+                    embedDrive(currentFolderId);
+                } else {
+                    openModal();
+                }
+            } catch (error) {
+                console.error("Error al cargar la configuración:", error);
+                openModal();
+            }
+        }
+
+        async function saveFolderId(folderId) {
+            if (!db || !currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'drive');
+                await setDoc(docRef, { folderId: folderId, updatedAt: new Date().toISOString() });
+            } catch (error) {
+                console.error("Error al guardar la configuración:", error);
+            }
+        }
+
+        // Event Listeners
+        if (connectEmptyBtn) connectEmptyBtn.addEventListener('click', openModal);
+        settingsBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        saveBtn.addEventListener('click', applyDriveUrl);
+        openVideoBtn.addEventListener('click', openVideoModal);
+        closeVideoBtn.addEventListener('click', closeVideoModal);
+        
+        // Close video modal on background click
+        videoModalOverlay.addEventListener('click', (e) => {
+            if (e.target === videoModalOverlay) closeVideoModal();
+        });
+        
+        // Enter key to save
+        driveUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') applyDriveUrl();
+        });
+
+        // Hide error message when typing
+        driveUrlInput.addEventListener('input', () => {
+            errorMessage.classList.add('hidden');
+        });
+
+        function openModal() {
+            errorMessage.classList.add('hidden');
+            modalOverlay.classList.remove('hidden');
+            
+            requestAnimationFrame(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalCard.classList.remove('modal-enter');
+                modalCard.classList.add('modal-enter-active');
+            });
+            
+            setTimeout(() => {
+                driveUrlInput.focus();
+            }, 100);
+        }
+
+        function closeModal() {
+            modalCard.classList.remove('modal-enter-active');
+            modalCard.classList.add('modal-exit-active');
+            modalOverlay.classList.add('opacity-0');
+
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+                modalCard.classList.remove('modal-exit-active');
+                modalCard.classList.add('modal-enter');
+            }, 300);
+        }
+
+        function openVideoModal() {
+            tutorialVideo.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"; 
+            videoModalOverlay.classList.remove('hidden');
+            
+            requestAnimationFrame(() => {
+                videoModalOverlay.classList.remove('opacity-0');
+                videoModalCard.classList.remove('modal-enter');
+                videoModalCard.classList.add('modal-enter-active');
+            });
+        }
+
+        function closeVideoModal() {
+            videoModalCard.classList.remove('modal-enter-active');
+            videoModalCard.classList.add('modal-exit-active');
+            videoModalOverlay.classList.add('opacity-0');
+
+            setTimeout(() => {
+                videoModalOverlay.classList.add('hidden');
+                videoModalCard.classList.remove('modal-exit-active');
+                videoModalCard.classList.add('modal-enter');
+                tutorialVideo.src = ""; 
+            }, 300);
+        }
+
+        function embedDrive(folderId) {
+            const embedUrl = `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
+            driveFrame.src = embedUrl;
+            emptyState.classList.add('hidden');
+            driveFrame.classList.remove('hidden');
+            
+            // Show the "Open to Edit" button and set its URL
+            openInDriveBtn.href = `https://drive.google.com/drive/folders/${folderId}`;
+            openInDriveBtn.classList.remove('hidden');
+            openInDriveBtn.classList.add('flex');
+        }
+
+        function showConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    zIndex: 9999,
+                    colors: ['#8b84f5', '#e07dd1', '#ff99cc', '#ffffff'] // Primary, Secondary/Pink, Light Pink, and White
+                });
+            }
+        }
+
+        async function applyDriveUrl() {
+            const url = driveUrlInput.value.trim();
+            
+            if (!url) {
+                if (!currentFolderId) {
+                    closeModal();
+                }
+                return;
+            }
+
+            const folderId = extractDriveFolderId(url);
+
+            if (folderId) {
+                currentFolderId = folderId;
+                
+                embedDrive(currentFolderId);
+                await saveFolderId(currentFolderId); // Trigger save to database
+                
+                showConfetti(); // Trigger confetti animation
+                closeModal();
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
+        }
+
+        function extractDriveFolderId(url) {
+            try {
+                const folderMatch = url.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+                if (folderMatch && folderMatch[1]) return folderMatch[1];
+
+                const parsedUrl = new URL(url);
+                const idParam = parsedUrl.searchParams.get('id');
+                if (idParam) return idParam;
+            } catch (error) {
+                console.error("Error al analizar la URL:", error);
+            }
+            return null;
+        }
+
+        // Kickoff
+        init();
+    </script>
+</body>
+</html>
