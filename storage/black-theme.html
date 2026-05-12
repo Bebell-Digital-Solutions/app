@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Recursos Corporativos</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // Black & White Theme Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sys: {
+                            bg: '#000000',       // Deep black for main background
+                            header: '#0a0a0a',   // Slightly off-black for separation
+                            primary: '#ffffff',  // Pure white for primary actions
+                            secondary: '#a3a3a3',// Gray for secondary icons/text
+                            title: '#ffffff',    // White for headings
+                            text: '#a3a3a3',     // Light gray for readable body text
+                            card: '#121212',     // Dark gray for surfaces/modals
+                            border: '#262626'    // Subtle dark border
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Animations */
+        @keyframes modalEnter {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-enter {
+            animation: modalEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        /* Custom scrollbar for dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #404040; 
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://cdn.shopify.com/s/files/1/0242/0175/6777/files/logo-animation-bebell-1.gif?v=1777437988">
+</head>
+<body class="bg-sys-bg text-sys-text flex flex-col font-sans h-screen overflow-hidden antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-sys-header border-b border-sys-border h-16 flex items-center justify-between px-6 shrink-0 z-10">
+        <div class="flex items-center gap-3">
+            <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6bd21ebfe102c05e039883d63589e41f50f515b0.png" alt="Logo de la Aplicación" class="h-8 w-auto object-contain brightness-0 invert">
+            <h1 class="text-sys-title font-bold text-xl tracking-tight" data-i18n="appTitle">Recursos Corporativos</h1>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <a id="openInDriveBtn" href="#" target="_blank" class="hidden items-center gap-2 px-4 py-2 rounded-lg bg-white text-black hover:bg-gray-200 transition-colors duration-200 font-medium text-sm shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                <span data-i18n="openEdit">Abrir para Editar</span>
+            </a>
+            <button id="settingsBtn" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sys-text hover:bg-white/10 hover:text-white transition-colors duration-200 font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span data-i18n="settings">Configuración</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="flex-1 relative flex items-center justify-center w-full h-full">
+        <div id="emptyState" class="text-center px-6 max-w-md">
+            <div class="bg-sys-card p-6 rounded-full inline-flex mb-6 shadow-sm border border-sys-border">
+                <svg class="w-16 h-16 text-sys-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-sys-title mb-3" data-i18n="emptyTitle">Ninguna Carpeta Conectada</h2>
+            <p class="text-sys-text mb-8" data-i18n="emptyDesc">Integra tu carpeta de Google Drive para acceder y ver tus archivos directamente desde este panel.</p>
+            <button id="connectEmptyBtn" class="bg-sys-primary hover:bg-gray-200 text-black px-6 py-3 rounded-xl font-medium shadow-lg shadow-white/5 transition-all transform hover:-translate-y-0.5" data-i18n="connectBtn">
+                Conectar Carpeta de Drive
+            </button>
+        </div>
+
+        <iframe id="driveFrame" class="absolute inset-0 w-full h-full hidden border-0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </main>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div id="modalCard" class="bg-sys-card p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-4 border border-sys-border">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-2xl font-bold text-sys-title" data-i18n="modalTitle">Configuración de Carpeta</h3>
+                <button id="closeModalBtn" class="text-sys-text hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <p class="text-sys-text text-sm mb-6" data-i18n="modalDesc">Ingresa la URL de la carpeta de Google Drive que deseas integrar.</p>
+            
+            <div class="mb-5">
+                <label for="driveUrl" class="block text-sm font-semibold text-sys-title mb-2" data-i18n="inputLabel">URL de la Carpeta de Google Drive</label>
+                <input type="url" id="driveUrl" data-i18n-placeholder="inputPlaceholder" placeholder="https://drive.google.com/drive/folders/..." class="w-full px-4 py-3 rounded-xl bg-sys-bg border border-sys-border focus:border-sys-primary focus:bg-[#0a0a0a] focus:ring-1 focus:ring-sys-primary outline-none text-sys-title transition-all placeholder:text-sys-text/40">
+                <div class="flex justify-between items-start mt-2">
+                    <p id="errorMessage" class="text-red-400 text-sm hidden" data-i18n="errorMsg">URL no válida.</p>
+                    <button id="openVideoBtn" type="button" class="text-sm text-sys-text hover:text-white font-medium transition-colors ml-auto flex items-center gap-1 underline decoration-sys-border hover:decoration-white underline-offset-4">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        <span data-i18n="videoTutorial">Ver tutorial paso a paso</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-3 mt-8">
+                <button id="cancelBtn" class="px-5 py-2.5 rounded-xl font-medium text-sys-text hover:bg-white/5 transition-colors" data-i18n="cancel">Cancelar</button>
+                <button id="saveBtn" class="px-6 py-2.5 rounded-xl font-medium text-black bg-sys-primary hover:bg-gray-200 shadow-md shadow-white/5 transition-colors" data-i18n="save">Integrar Carpeta</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="videoModalOverlay" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[60] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div id="videoModalCard" class="bg-sys-card p-2 rounded-2xl shadow-2xl w-full max-w-4xl mx-4 relative border border-sys-border">
+            <button id="closeVideoBtn" class="absolute -top-12 right-0 text-sys-text hover:text-white transition-colors" data-i18n-aria="closeVideo">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
+                <div class="flex items-center justify-center w-full h-full text-sys-text">
+                    [Video Placeholder]
+                </div>
+                <iframe id="tutorialVideo" class="w-full h-full hidden" src="" title="Video Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const settingsBtn = document.getElementById('settingsBtn');
+            const connectEmptyBtn = document.getElementById('connectEmptyBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalCard = document.getElementById('modalCard');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const driveUrlInput = document.getElementById('driveUrl');
+            const errorMessage = document.getElementById('errorMessage');
+            const emptyState = document.getElementById('emptyState');
+            const driveFrame = document.getElementById('driveFrame');
+            const openInDriveBtn = document.getElementById('openInDriveBtn');
+
+            // Video Modal Elements
+            const openVideoBtn = document.getElementById('openVideoBtn');
+            const videoModalOverlay = document.getElementById('videoModalOverlay');
+            const closeVideoBtn = document.getElementById('closeVideoBtn');
+            const videoModalCard = document.getElementById('videoModalCard');
+
+            // --- Main Modal Logic ---
+            const openSettingsModal = () => {
+                modalOverlay.classList.remove('hidden');
+                // Trigger reflow
+                void modalOverlay.offsetWidth; 
+                modalOverlay.classList.remove('opacity-0');
+                modalCard.classList.add('modal-enter');
+                driveUrlInput.value = '';
+                errorMessage.classList.add('hidden');
+                setTimeout(() => driveUrlInput.focus(), 100);
+            };
+
+            const closeSettingsModal = () => {
+                modalOverlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                    modalCard.classList.remove('modal-enter');
+                }, 300);
+            };
+
+            // Event Listeners
+            settingsBtn.addEventListener('click', openSettingsModal);
+            connectEmptyBtn.addEventListener('click', openSettingsModal);
+            closeModalBtn.addEventListener('click', closeSettingsModal);
+            cancelBtn.addEventListener('click', closeSettingsModal);
+            
+            // Close on overlay click
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeSettingsModal();
+            });
+
+            // Save & Integrate Logic
+            saveBtn.addEventListener('click', () => {
+                const url = driveUrlInput.value.trim();
+                if (!url || !url.includes('drive.google.com')) {
+                    errorMessage.classList.remove('hidden');
+                    driveUrlInput.classList.add('border-red-500', 'focus:ring-red-500');
+                    return;
+                }
+                
+                // Reset errors
+                errorMessage.classList.add('hidden');
+                driveUrlInput.classList.remove('border-red-500', 'focus:ring-red-500');
+
+                // Simulate loading iframe & state switch
+                closeSettingsModal();
+                
+                // Show success confetti
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ffffff', '#a3a3a3', '#262626'] // B&W confetti theme
+                });
+
+                // Update UI state
+                emptyState.classList.add('hidden');
+                driveFrame.classList.remove('hidden');
+                openInDriveBtn.classList.remove('hidden');
+                openInDriveBtn.classList.add('flex');
+                openInDriveBtn.href = url;
+            });
+
+            // --- Video Modal Logic ---
+            const openVideoModal = () => {
+                videoModalOverlay.classList.remove('hidden');
+                void videoModalOverlay.offsetWidth;
+                videoModalOverlay.classList.remove('opacity-0');
+                videoModalCard.classList.add('modal-enter');
+            };
+
+            const closeVideoModal = () => {
+                videoModalOverlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    videoModalOverlay.classList.add('hidden');
+                    videoModalCard.classList.remove('modal-enter');
+                }, 300);
+            };
+
+            openVideoBtn.addEventListener('click', openVideoModal);
+            closeVideoBtn.addEventListener('click', closeVideoModal);
+            
+            videoModalOverlay.addEventListener('click', (e) => {
+                if (e.target === videoModalOverlay) closeVideoModal();
+            });
+        });
+    </script>
+</body>
+</html>
