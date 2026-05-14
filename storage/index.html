@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DropDrive</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://bucket.mlcdn.com/a/3336/3336910/images/79790380f5a30ceadcc692df423221d8147ca312.png">
+    
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Phosphor Icons for modern, clean iconography -->
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- SortableJS for smooth drag-and-drop visual reordering -->
+    <!-- SortableJS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <!-- MD5 Library for Gravatar -->
+    <!-- MD5 for Gravatar fallback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <link rel="icon" type="image/png" href="https://bucket.mlcdn.com/a/3336/3336910/images/79790380f5a30ceadcc692df423221d8147ca312.png">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -26,9 +27,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        primary: {
-                            50: '#f8fafc', 100: '#f1f5f9', 500: '#000000', 600: '#1a1a1a', 700: '#0f0f0f',
-                        }
+                        primary: { 50: '#f8fafc', 100: '#f1f5f9', 500: '#000000', 600: '#1a1a1a', 700: '#0f0f0f' }
                     }
                 }
             }
@@ -41,32 +40,26 @@
             --top-bar-text: #ffffff;
             --top-bar-border: #1a1a1a;
         }
-
         .custom-top-bar {
             background-color: var(--top-bar-bg) !important;
             color: var(--top-bar-text) !important;
             border-bottom-color: var(--top-bar-border) !important;
         }
-
         body { font-family: 'Inter', sans-serif; }
-        
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
         .custom-scrollbar-dark::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar-dark::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
         .custom-scrollbar-dark::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         .custom-scrollbar-dark::-webkit-scrollbar-thumb:hover { background: #475569; }
-        
         .drag-active {
             border: 2px dashed #000000 !important;
             background-color: rgba(0, 0, 0, 0.05) !important;
         }
-
         .spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
@@ -74,9 +67,7 @@
             animation: spin 1s ease-in-out infinite;
         }
         .spinner-white { border-top-color: #ffffff; }
-        
         @keyframes spin { to { transform: rotate(360deg); } }
-        
         .toast-enter { animation: slideIn 0.3s ease-out forwards; }
         .toast-exit { animation: slideOut 0.3s ease-in forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -114,17 +105,15 @@
                 </ul>
             </div>
             
-            <div class="p-4 border-t border-slate-100">
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <p class="text-xs text-slate-500 mb-2" data-i18n="connectedAppsScript">Connected to Apps Script</p>
-                    <button onclick="showSettingsModal()" class="w-full flex items-center justify-between text-sm text-slate-700 hover:text-black font-medium transition-colors group">
-                        <div class="flex items-center gap-2 overflow-hidden">
-                            <img id="sidebar-profile-pic" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Profile" class="w-6 h-6 rounded-full bg-slate-200 border border-slate-300">
-                            <span class="truncate" data-i18n="settings">Settings</span>
-                        </div>
-                        <i class="ph ph-gear opacity-50 group-hover:opacity-100 transition-opacity"></i>
-                    </button>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between shrink-0 cursor-pointer hover:bg-slate-200 transition-colors rounded-tr-xl" onclick="showSettingsModal()">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <img id="sidebar-profile-pic" referrerpolicy="no-referrer" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="User" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/32x32/000000/ffffff?text=U';">
+                    <div class="flex flex-col">
+                        <p class="text-sm font-semibold text-slate-700" data-i18n="settings">Settings</p>
+                        <p class="text-[10px] text-slate-500" data-i18n="connectedAppsScript">Connected to Apps Script</p>
+                    </div>
                 </div>
+                <i class="ph ph-gear text-slate-400"></i>
             </div>
         </div>
     </aside>
@@ -147,11 +136,7 @@
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">
-                
-                <!-- Language Toggle Button -->
-                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="bg-white/10 text-white hover:bg-white/20 px-2 py-1.5 rounded-lg font-semibold text-xs transition-colors border border-white/10 w-10 text-center" title="Switch Language">
-                    EN
-                </button>
+                <button onclick="toggleLanguage()" id="lang-toggle-btn" class="bg-white/10 text-white hover:bg-white/20 px-2 py-1.5 rounded-lg font-semibold text-xs transition-colors border border-white/10 w-10 text-center" title="Switch Language">EN</button>
 
                 <div id="system-status" class="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/10 transition-colors" title="System Offline">
                     <div id="status-dot" class="w-2.5 h-2.5 rounded-full bg-red-500 transition-colors duration-300"></div>
@@ -177,7 +162,6 @@
                 <!-- Breadcrumbs injected via JS -->
             </nav>
             <div class="flex items-center gap-3 shrink-0 h-10">
-                <!-- Filter By Format Dropdown -->
                 <div class="relative flex items-center bg-slate-100 rounded-lg p-1 hidden sm:flex h-full box-border">
                     <i class="ph ph-funnel text-slate-500 ml-2"></i>
                     <select id="file-type-filter" onchange="setFilterType(this.value)" class="bg-transparent border-none text-slate-600 text-sm font-medium h-full pl-2 pr-6 focus:ring-0 outline-none cursor-pointer appearance-none hover:text-black transition-colors">
@@ -192,7 +176,6 @@
                     <i class="ph ph-caret-down absolute right-2 text-slate-400 pointer-events-none text-xs"></i>
                 </div>
 
-                <!-- View Toggles -->
                 <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg shrink-0 h-full box-border">
                     <button onclick="toggleThumbnails()" id="btn-toggle-thumbnails" class="p-1.5 rounded text-slate-500 hover:text-black hover:bg-white shadow-sm transition-all h-full aspect-square flex items-center justify-center" title="Toggle Privacy (Show/Hide Thumbnails)">
                         <i id="icon-thumbnails" class="ph-fill ph-eye text-lg"></i>
@@ -209,7 +192,7 @@
         </div>
 
         <!-- Files Area -->
-        <div class="flex-1 overflow-y-auto p-4 lg:p-8 relative" id="files-container">
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 relative flex flex-col" id="files-container">
             <!-- Empty State -->
             <div id="empty-state" class="hidden flex-col items-center justify-center h-full text-slate-400">
                 <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-4">
@@ -222,40 +205,36 @@
             <!-- Folders Grid -->
             <div class="mb-8">
                 <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4" id="folders-title" data-i18n="folders">Folders</h3>
-                <div id="folders-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <!-- Folders injected via JS -->
-                </div>
+                <div id="folders-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
             </div>
 
             <!-- Files Grid -->
-            <div>
+            <div class="flex-1">
                 <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4" id="files-title" data-i18n="files">Files</h3>
-                <div id="files-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    <!-- Files injected via JS -->
-                </div>
+                <div id="files-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
             </div>
+
+            <!-- Footer -->
+            <footer class="mt-8 pt-6 border-t border-slate-200 text-center text-xs text-slate-400 shrink-0">
+                Developed with 💖 by Bebell Digital Solutions &bull; Copyright &copy; 2026 All rights reserved
+            </footer>
         </div>
 
-        <!-- Footer -->
-        <footer class="w-full py-3 px-4 text-center text-[11px] sm:text-xs text-slate-400 border-t border-slate-100 bg-white shrink-0 z-10 relative">
-            Developed with 💖 by <span class="font-medium text-slate-500">Bebell Digital Solutions</span> &bull; Copyright &copy; 2026 All rights reserved
-        </footer>
+        <!-- Floating Action Button (Always Visible) -->
+        <button onclick="showCreateFolderModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full shadow-xl flex items-center justify-center hover:scale-105 hover:bg-slate-800 transition-all z-40 group" title="New Folder">
+            <i class="ph ph-plus text-2xl group-hover:rotate-90 transition-transform duration-300"></i>
+        </button>
 
         <!-- Drag Overlay -->
-        <div id="drag-overlay" class="absolute inset-0 bg-black/90 flex-col items-center justify-center text-white z-40 hidden backdrop-blur-sm rounded-xl m-4 border-4 border-dashed border-white">
+        <div id="drag-overlay" class="absolute inset-0 bg-black/90 flex-col items-center justify-center text-white z-50 hidden backdrop-blur-sm rounded-xl m-4 border-4 border-dashed border-white">
             <i class="ph-fill ph-file-arrow-up text-6xl mb-4 animate-bounce"></i>
             <h2 class="text-2xl font-bold" data-i18n="dropFilesTitle">Drop files to upload</h2>
             <p class="opacity-80 mt-2 text-center max-w-sm" data-i18n="dropFilesMsg">Files will be uploaded directly to your Google Drive in the current folder.</p>
         </div>
-
-        <!-- FAB (Floating Action Button) for New Folder -->
-        <button onclick="showCreateFolderModal()" class="absolute bottom-6 right-6 z-40 w-14 h-14 bg-black text-white rounded-full shadow-[0_4px_14px_0_rgba(0,0,0,0.39)] hover:bg-slate-800 transition-transform active:scale-95 flex items-center justify-center" title="New Folder">
-            <i class="ph ph-folder-plus text-2xl"></i>
-        </button>
     </main>
 
     <!-- Setup / Settings Modal -->
-    <div id="setup-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden overflow-y-auto pt-10 pb-10">
+    <div id="setup-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden overflow-y-auto pt-10 pb-10">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl m-4 transform transition-all flex flex-col">
             
             <div class="px-6 pt-6 pb-0 border-b border-slate-100">
@@ -300,7 +279,6 @@
 
                 <!-- Instructions Tab -->
                 <div id="tab-content-instructions" class="hidden animate-[slideIn_0.2s_ease-out]">
-                    
                     <div class="flex items-start gap-4 mb-8">
                         <div class="w-8 h-8 rounded-full bg-slate-100 text-black flex items-center justify-center font-bold shrink-0 mt-0.5">1</div>
                         <div class="flex-1 overflow-hidden">
@@ -314,7 +292,6 @@
                                         <i class="ph ph-copy"></i> <span data-i18n="copyCode">Copy Code</span>
                                     </button>
                                 </div>
-                                <!-- NOTE: Code snippet remains in English to ensure functionality -->
                                 <textarea id="raw-script-code" class="hidden">
 /**
  * DropDrive Backend API
@@ -322,7 +299,6 @@
  * - Execute as: Me
  * - Who has access: Anyone
  */
-
 function doGet(e) { return handleRequest(e); }
 function doPost(e) { return handleRequest(e); }
 
@@ -337,11 +313,7 @@ function handleRequest(e) {
     const action = params.action;
     let result = {};
     switch (action) {
-      case 'test': 
-        let userEmail = '';
-        try { userEmail = Session.getEffectiveUser().getEmail(); } catch(e) {}
-        result = { status: 'success', message: 'API is connected.', email: userEmail }; 
-        break;
+      case 'test': result = testConnection(); break;
       case 'list': result = listContents(params.folderId || 'root'); break;
       case 'createFolder': result = createNewFolder(params.folderName, params.parentId || 'root'); break;
       case 'rename': result = renameItem(params.id, params.newName, params.type); break;
@@ -356,6 +328,18 @@ function handleRequest(e) {
     output.setContent(JSON.stringify({ error: error.toString() }));
     return output;
   }
+}
+
+function testConnection() {
+  let email = "";
+  let photoUrl = "";
+  try { email = Session.getEffectiveUser().getEmail(); } catch(e) {}
+  try {
+    const tempFile = DriveApp.getRootFolder().createFile("dropdrive_temp", "temp");
+    photoUrl = tempFile.getOwner().getPhotoUrl();
+    tempFile.setTrashed(true);
+  } catch(e) {}
+  return { status: 'success', message: 'API connected.', email: email, photoUrl: photoUrl };
 }
 
 function listContents(folderId) {
@@ -435,7 +419,7 @@ function deleteItem(id) {
     </div>
 
     <!-- Create Folder Modal -->
-    <div id="create-folder-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div id="create-folder-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 m-4">
             <h2 class="text-lg font-bold text-slate-800 mb-4" data-i18n="newFolderModalTitle">New Folder</h2>
             <input type="text" id="new-folder-name" data-i18n-placeholder="folderNamePlaceholder" placeholder="Folder name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black transition-all mb-6">
@@ -447,7 +431,7 @@ function deleteItem(id) {
     </div>
 
     <!-- Rename Modal -->
-    <div id="rename-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div id="rename-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 m-4">
             <h2 class="text-lg font-bold text-slate-800 mb-4" id="rename-title" data-i18n="renameModalTitle">Rename Item</h2>
             <input type="text" id="rename-input" data-i18n-placeholder="renamePlaceholder" placeholder="New name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black transition-all mb-6">
@@ -459,7 +443,7 @@ function deleteItem(id) {
     </div>
 
     <!-- Confirm Modal -->
-    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 m-4 text-center">
             <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="ph ph-warning text-2xl"></i>
@@ -474,13 +458,13 @@ function deleteItem(id) {
     </div>
 
     <!-- Global Loading Overlay -->
-    <div id="global-loader" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[60] flex flex-col items-center justify-center hidden">
+    <div id="global-loader" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[70] flex flex-col items-center justify-center hidden">
         <div class="w-10 h-10 spinner mb-4 border-slate-200"></div>
         <p class="text-sm font-medium text-slate-600" id="loader-text" data-i18n="loadingFiles">Loading...</p>
     </div>
 
     <!-- Toasts Container -->
-    <div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toast-container" class="fixed bottom-4 left-4 lg:left-auto lg:right-4 z-[80] flex flex-col gap-2 pointer-events-none"></div>
 
     <script>
         // --- Internationalization (i18n) Dictionary ---
@@ -509,14 +493,10 @@ function deleteItem(id) {
                 emptyFolderMsg: "This folder is empty or no files match your filters.",
                 dropFilesTitle: "Drop files to upload",
                 dropFilesMsg: "Files will be uploaded directly to your Google Drive in the current folder.",
-                // Modals
                 setupTitle: "Bring Your Own Backend",
                 connectUrlTab: "Connect URL",
                 setupInstructionsTab: "Setup Instructions",
                 privacyNotice: "DropDrive runs locally on your browser. To manage files, deploy a simple script in your Google Account. <strong>Your data never leaves your device except directly to your Google Drive.</strong>",
-                skipForNow: "Skip for now",
-                saveAndConnect: "Save Key & Connect",
-                setupNotice: "DriveDrop runs locally on your browser. To manage files, deploy a simple script in your Google Account. <strong>Your data never leaves your device except directly to your Google Drive.</strong>",
                 skipForNow: "Skip for now",
                 saveAndConnect: "Save Key & Connect",
                 step1Title: "Create the Script",
@@ -545,7 +525,6 @@ function deleteItem(id) {
                 areYouSure: "Are you sure?",
                 cannotBeUndone: "This action cannot be undone.",
                 loadingFiles: "Loading files...",
-                // Dynamic JS strings
                 demoModeActive: "Demo Mode Active: UI preview only. Connect your API to manage real files.",
                 thumbnailsEnabled: "Thumbnails enabled",
                 privacyModeActive: "Privacy mode active (thumbnails hidden)",
@@ -567,7 +546,6 @@ function deleteItem(id) {
                 connectApiNav: "Connect API via Settings to navigate inside folders.",
                 folderTag: "Folder"
             },
-            
             es: {
                 appName: "DropDrive",
                 newFolder: "Nueva Carpeta",
@@ -592,14 +570,10 @@ function deleteItem(id) {
                 emptyFolderMsg: "Esta carpeta está vacía o ningún archivo coincide con los filtros.",
                 dropFilesTitle: "Suelta archivos para subir",
                 dropFilesMsg: "Los archivos se subirán directamente a tu Google Drive en la carpeta actual.",
-                // Modals
                 setupTitle: "Trae tu Propio Backend",
                 connectUrlTab: "Conectar URL",
                 setupInstructionsTab: "Instrucciones",
                 privacyNotice: "DropDrive se ejecuta localmente en tu navegador. Para gestionar archivos, despliega un script en tu cuenta de Google. <strong>Tus datos nunca salen de tu dispositivo excepto directamente hacia tu Google Drive.</strong>",
-                skipForNow: "Omitir por ahora",
-                saveAndConnect: "Guardar y Conectar",
-                setupNotice: "DriveDrop se ejecuta localmente en tu navegador. Para gestionar archivos, despliega un script en tu cuenta de Google. <strong>Tus datos nunca salen de tu dispositivo excepto directamente hacia tu Google Drive.</strong>",
                 skipForNow: "Omitir por ahora",
                 saveAndConnect: "Guardar y Conectar",
                 step1Title: "Crear el Script",
@@ -628,7 +602,6 @@ function deleteItem(id) {
                 areYouSure: "¿Estás seguro?",
                 cannotBeUndone: "Esta acción no se puede deshacer.",
                 loadingFiles: "Cargando archivos...",
-                // Dynamic JS strings
                 demoModeActive: "Modo Demo Activo: Solo vista previa. Conecta tu API para gestionar archivos.",
                 thumbnailsEnabled: "Miniaturas activadas",
                 privacyModeActive: "Modo privacidad activo (miniaturas ocultas)",
@@ -657,13 +630,13 @@ function deleteItem(id) {
             return browserLang.toLowerCase().startsWith('es') ? 'es' : 'en';
         }
 
-        // --- State Management ---
         const State = {
             lang: detectLanguage(),
             gasUrl: localStorage.getItem('dropdrive_url') || '',
-            userEmail: localStorage.getItem('dropdrive_user_email') || '',
+            userEmail: localStorage.getItem('dropdrive_email') || '',
+            userPhoto: localStorage.getItem('dropdrive_photo') || '',
             currentFolder: 'root',
-            path: [{ id: 'root', name: 'My Drive' }], // name will be updated by i18n
+            path: [{ id: 'root', name: 'My Drive' }],
             folders: [],
             files: [],
             isSidebarOpen: false,
@@ -673,11 +646,9 @@ function deleteItem(id) {
             sortableInstances: []
         };
 
-        // --- DOM Elements ---
         const DOM = {
             setupModal: document.getElementById('setup-modal'),
             gasUrlInput: document.getElementById('gas-url-input'),
-            sidebarProfilePic: document.getElementById('sidebar-profile-pic'),
             btnSetupCancel: document.getElementById('btn-setup-cancel'),
             loader: document.getElementById('global-loader'),
             loaderText: document.getElementById('loader-text'),
@@ -699,35 +670,25 @@ function deleteItem(id) {
 
         function applyTranslations() {
             const t = i18n[State.lang];
-            
-            // Text nodes
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.innerHTML = t[key];
             });
-            
-            // Placeholders
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (t[key]) el.placeholder = t[key];
             });
 
-            // Toggle Button
             const langBtn = document.getElementById('lang-toggle-btn');
             if(langBtn) langBtn.textContent = State.lang.toUpperCase();
 
-            // Dynamic UI updates based on language change
-            // Update root path name
             if(State.path.length > 0 && State.path[0].id === 'root') {
                 State.path[0].name = t.myDrive;
             }
             
-            // Re-render strings that are handled by JS
             updateSystemStatus(State.gasUrl ? 'connected' : 'disconnected');
             renderBreadcrumbs();
             renderSidebarTree();
-            
-            // Rerender items to translate "Folder" tag in list view
             renderItems(DOM.searchInput.value.toLowerCase());
         }
 
@@ -737,19 +698,15 @@ function deleteItem(id) {
         }
 
         function init() {
-            // Apply Initial Language
             applyTranslations();
-
-            // Load snippet into display area
-            document.getElementById('display-script-code').textContent = document.getElementById('raw-script-code').value;
-
-            // Set initial thumbnail icon state
-            const thumbIcon = document.getElementById('icon-thumbnails');
-            if (thumbIcon) {
-                thumbIcon.className = State.showThumbnails ? 'ph-fill ph-eye text-lg' : 'ph-fill ph-eye-slash text-lg';
-            }
-
             updateProfilePicture();
+            
+            const rawEl = document.getElementById('raw-script-code');
+            const displayEl = document.getElementById('display-script-code');
+            if (rawEl && displayEl) displayEl.textContent = rawEl.value;
+
+            const thumbIcon = document.getElementById('icon-thumbnails');
+            if (thumbIcon) thumbIcon.className = State.showThumbnails ? 'ph-fill ph-eye text-lg' : 'ph-fill ph-eye-slash text-lg';
 
             if (!State.gasUrl) {
                 DOM.setupModal.classList.remove('hidden');
@@ -761,12 +718,29 @@ function deleteItem(id) {
             setupEventListeners();
         }
 
+        function updateProfilePicture() {
+            const picEl = document.getElementById('sidebar-profile-pic');
+            if (!picEl) return;
+
+            if (State.userPhoto) {
+                picEl.src = State.userPhoto;
+            } else if (State.userEmail && typeof md5 !== 'undefined') {
+                try {
+                    const hash = md5(State.userEmail.trim().toLowerCase());
+                    picEl.src = `https://www.gravatar.com/avatar/${hash}?d=identicon&s=64`;
+                } catch (e) {
+                    picEl.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+                }
+            } else {
+                picEl.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+            }
+        }
+
         function updateSystemStatus(state) {
             const t = i18n[State.lang];
             const dot = document.getElementById('status-dot');
             const text = document.getElementById('status-text');
             const container = document.getElementById('system-status');
-
             dot.classList.remove('animate-pulse');
 
             if (state === 'connected') {
@@ -774,19 +748,16 @@ function deleteItem(id) {
                 text.textContent = t.operational;
                 text.className = 'text-xs font-semibold text-white hidden md:block';
                 container.className = 'flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 transition-colors';
-                container.title = 'Connected to Google Drive';
             } else if (state === 'processing') {
                 dot.className = 'w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse transition-colors duration-300';
                 text.textContent = t.processing;
                 text.className = 'text-xs font-semibold text-white hidden md:block';
                 container.className = 'flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 transition-colors';
-                container.title = 'Waiting for response';
             } else {
                 dot.className = 'w-2.5 h-2.5 rounded-full bg-red-400 transition-colors duration-300';
                 text.textContent = t.offlineDemo;
                 text.className = 'text-xs font-semibold text-white hidden md:block';
                 container.className = 'flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 transition-colors';
-                container.title = 'Not connected to API';
             }
         }
 
@@ -815,14 +786,12 @@ function deleteItem(id) {
             tempTextArea.value = code;
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
-            
             try {
                 document.execCommand('copy');
                 const feedback = document.getElementById('copy-feedback');
                 feedback.classList.remove('opacity-0');
                 setTimeout(() => feedback.classList.add('opacity-0'), 2000);
             } catch (err) {
-                console.error('Failed to copy', err);
                 showToast("Failed to copy code.", "error");
             }
             document.body.removeChild(tempTextArea);
@@ -845,8 +814,7 @@ function deleteItem(id) {
 
         function setupEventListeners() {
             DOM.searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                renderItems(query);
+                renderItems(e.target.value.toLowerCase());
             });
 
             function isOSFileDrag(e) {
@@ -856,11 +824,7 @@ function deleteItem(id) {
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 document.body.addEventListener(eventName, preventDefaults, false);
             });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
+            function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
 
             let dragCounter = 0;
             document.body.addEventListener('dragenter', (e) => {
@@ -914,7 +878,6 @@ function deleteItem(id) {
         function saveGasUrl() {
             const t = i18n[State.lang];
             const url = DOM.gasUrlInput.value.trim();
-
             if (!url.startsWith('https://script.google.com/')) {
                 showToast(t.invalidUrl, "error");
                 return;
@@ -926,40 +889,43 @@ function deleteItem(id) {
             updateSystemStatus('processing');
 
             fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: 'test' })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                State.gasUrl = url;
-                localStorage.setItem('dropdrive_url', url);
-                
-                if (data.email) {
-                    State.userEmail = data.email;
-                    localStorage.setItem('dropdrive_user_email', data.email);
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ action: 'test' })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    State.gasUrl = url;
+                    localStorage.setItem('dropdrive_url', url);
+                    
+                    if (data.email) {
+                        State.userEmail = data.email;
+                        localStorage.setItem('dropdrive_email', data.email);
+                    }
+                    if (data.photoUrl) {
+                        State.userPhoto = data.photoUrl;
+                        localStorage.setItem('dropdrive_photo', data.photoUrl);
+                    }
+                    
                     updateProfilePicture();
+                    DOM.setupModal.classList.add('hidden');
+                    updateSystemStatus('connected');
+                    triggerConfetti();
+                    showToast(t.connectedSuccess, "success");
+                    loadCurrentFolder();
+                } else {
+                    throw new Error("Invalid response");
                 }
-                
-                DOM.setupModal.classList.add('hidden');
-                updateSystemStatus('connected');
-                triggerConfetti();
-                showToast(t.connectedSuccess, "success");
-                loadCurrentFolder();
-            } else {
-                throw new Error(data.error || "Invalid response");
-            }
-        })
-        .catch(err => {
-            console.error("API Connection Error:", err);
-            updateSystemStatus('disconnected');
-            showToast(t.connectionFailed, "error");
-        })
-        .finally(() => {
-            btn.innerHTML = `<span data-i18n="saveAndConnect">${t.saveAndConnect}</span>`;
-            btn.disabled = false;
-        });
+            })
+            .catch(err => {
+                updateSystemStatus('disconnected');
+                showToast(t.connectionFailed, "error");
+            })
+            .finally(() => {
+                btn.innerHTML = `<span data-i18n="saveAndConnect">${t.saveAndConnect}</span>`;
+                btn.disabled = false;
+            });
         }
 
         function showSettingsModal() {
@@ -969,23 +935,8 @@ function deleteItem(id) {
             if(State.isSidebarOpen) toggleSidebar();
         }
 
-        function updateProfilePicture() {
-            if (State.userEmail && typeof md5 !== 'undefined') {
-                try {
-                    const hash = md5(State.userEmail.trim().toLowerCase());
-                    DOM.sidebarProfilePic.src = `https://www.gravatar.com/avatar/${hash}?d=mp&s=64`;
-                } catch (e) {
-                    DOM.sidebarProfilePic.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
-                }
-            } else {
-                DOM.sidebarProfilePic.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
-            }
-        }
-
         function closeSetupModal() {
             DOM.setupModal.classList.add('hidden');
-            
-            // Demo Mode Check
             if (!State.gasUrl && State.folders.length === 0 && State.files.length === 0) {
                 State.folders = [
                     { id: 'mock-f1', name: 'Work Documents' },
@@ -995,10 +946,7 @@ function deleteItem(id) {
                 State.files = [
                     { id: 'mock-file1', name: 'Project_Proposal_v2.pdf', mimeType: 'application/pdf', size: 2450000, url: '#' },
                     { id: 'mock-img1', name: 'IMG_8392.jpg', mimeType: 'image/jpeg', size: 4200000, url: 'https://images.unsplash.com/photo-1707343843437-caacff5cfa74?auto=format&fit=crop&w=400&q=80' },
-                    { id: 'mock-file3', name: 'Q3_Financials.xlsx', mimeType: 'application/vnd.ms-excel', size: 850000, url: '#' },
-                    { id: 'mock-vid1', name: 'Marketing_Video_Draft.mp4', mimeType: 'video/mp4', size: 15600000, url: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=400&q=80' },
-                    { id: 'mock-zip1', name: 'Source_Code.zip', mimeType: 'application/zip', size: 8500000, url: '#' },
-                    { id: 'mock-aud1', name: 'Interview_Recording.mp3', mimeType: 'audio/mpeg', size: 3200000, url: '#' }
+                    { id: 'mock-vid1', name: 'Marketing_Video.mp4', mimeType: 'video/mp4', size: 15600000, url: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=400&q=80' }
                 ];
                 renderItems();
                 renderBreadcrumbs();
@@ -1026,9 +974,7 @@ function deleteItem(id) {
             State.showThumbnails = !State.showThumbnails;
             localStorage.setItem('dropdrive_thumbnails', State.showThumbnails);
             const icon = document.getElementById('icon-thumbnails');
-            if (icon) {
-                icon.className = State.showThumbnails ? 'ph-fill ph-eye text-lg' : 'ph-fill ph-eye-slash text-lg';
-            }
+            if (icon) icon.className = State.showThumbnails ? 'ph-fill ph-eye text-lg' : 'ph-fill ph-eye-slash text-lg';
             renderItems(DOM.searchInput.value.toLowerCase());
             showToast(State.showThumbnails ? t.thumbnailsEnabled : t.privacyModeActive, "info");
         }
@@ -1253,16 +1199,11 @@ function deleteItem(id) {
                     localStorage.setItem(`sort_folders_${State.currentFolder}`, JSON.stringify(folderIds));
                     localStorage.setItem(`sort_files_${State.currentFolder}`, JSON.stringify(fileIds));
                 };
-
                 if (DOM.foldersGrid.children.length > 0) {
-                    State.sortableInstances.push(new Sortable(DOM.foldersGrid, {
-                        animation: 150, ghostClass: 'opacity-40', delay: 100, delayOnTouchOnly: true, onEnd: saveOrder
-                    }));
+                    State.sortableInstances.push(new Sortable(DOM.foldersGrid, { animation: 150, ghostClass: 'opacity-40', delay: 100, delayOnTouchOnly: true, onEnd: saveOrder }));
                 }
                 if (DOM.filesGrid.children.length > 0) {
-                    State.sortableInstances.push(new Sortable(DOM.filesGrid, {
-                        animation: 150, ghostClass: 'opacity-40', delay: 100, delayOnTouchOnly: true, onEnd: saveOrder
-                    }));
+                    State.sortableInstances.push(new Sortable(DOM.filesGrid, { animation: 150, ghostClass: 'opacity-40', delay: 100, delayOnTouchOnly: true, onEnd: saveOrder }));
                 }
             }
         }
@@ -1273,7 +1214,6 @@ function deleteItem(id) {
                 const isLast = index === State.path.length - 1;
                 const btn = document.createElement('button');
                 btn.className = `hover:text-black transition-colors ${isLast ? 'font-semibold text-slate-800' : 'px-1 rounded hover:bg-slate-100'}`;
-                // Fallback for root if missing name update
                 btn.textContent = item.id === 'root' ? i18n[State.lang].myDrive : item.name;
                 btn.onclick = () => { if(!isLast) navigateUpTo(index); };
                 
@@ -1282,7 +1222,6 @@ function deleteItem(id) {
                     btn.ondragleave = handleFolderDragLeave;
                     btn.ondrop = (e) => handleFolderDrop(e, item.id);
                 }
-
                 DOM.breadcrumbs.appendChild(btn);
 
                 if (!isLast) {
@@ -1301,11 +1240,9 @@ function deleteItem(id) {
             rootLi.className = `flex items-center gap-2 p-2 rounded-lg cursor-pointer ${State.currentFolder === 'root' ? 'bg-slate-100 text-black font-medium' : 'text-slate-600 hover:bg-slate-50 transition-colors'}`;
             rootLi.innerHTML = `<i class="ph-fill ph-folder"></i> ${t.myDrive}`;
             rootLi.onclick = () => { if(State.currentFolder !== 'root') navigateUpTo(0); };
-            
             rootLi.ondragover = handleFolderDragOver;
             rootLi.ondragleave = handleFolderDragLeave;
             rootLi.ondrop = (e) => handleFolderDrop(e, 'root');
-            
             DOM.folderTree.appendChild(rootLi);
 
             if (State.currentFolder !== 'root') {
@@ -1394,7 +1331,6 @@ function deleteItem(id) {
         }
 
         function handleItemDragEnd(e) { e.target.classList.remove('opacity-40', 'scale-95'); }
-
         function handleFolderDragOver(e) {
             e.preventDefault();
             if (e.dataTransfer.types.includes('application/json')) {
@@ -1402,7 +1338,6 @@ function deleteItem(id) {
                 e.currentTarget.classList.add('ring-2', 'ring-black', 'bg-slate-100');
             }
         }
-
         function handleFolderDragLeave(e) { e.currentTarget.classList.remove('ring-2', 'ring-black', 'bg-slate-100'); }
 
         async function handleFolderDrop(e, targetFolderId) {
@@ -1516,16 +1451,9 @@ function deleteItem(id) {
             }
         });
 
-        function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        function showLoader(text) {
-            DOM.loaderText.textContent = text;
-            DOM.loader.classList.remove('hidden');
-        }
-        function hideLoader() {
-            DOM.loader.classList.add('hidden');
-        }
+        function showLoader(text) { DOM.loaderText.textContent = text; DOM.loader.classList.remove('hidden'); }
+        function hideLoader() { DOM.loader.classList.add('hidden'); }
 
         function showToast(message, type = "info") {
             const id = 'toast-' + Date.now();
@@ -1615,7 +1543,6 @@ function deleteItem(id) {
 
         // Start App
         window.addEventListener('DOMContentLoaded', init);
-
     </script>
 </body>
 </html>
