@@ -337,7 +337,11 @@ function handleRequest(e) {
     const action = params.action;
     let result = {};
     switch (action) {
-      case 'test': result = { status: 'success', message: 'API is connected.', email: Session.getEffectiveUser().getEmail() }; break;
+      case 'test': 
+        let userEmail = '';
+        try { userEmail = Session.getEffectiveUser().getEmail(); } catch(e) {}
+        result = { status: 'success', message: 'API is connected.', email: userEmail }; 
+        break;
       case 'list': result = listContents(params.folderId || 'root'); break;
       case 'createFolder': result = createNewFolder(params.folderName, params.parentId || 'root'); break;
       case 'rename': result = renameItem(params.id, params.newName, params.type); break;
@@ -922,39 +926,40 @@ function deleteItem(id) {
             updateSystemStatus('processing');
 
             fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ action: 'test' })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    State.gasUrl = url;
-                    localStorage.setItem('dropdrive_url', url);
-                    
-                    if (data.email) {
-                        State.userEmail = data.email;
-                        localStorage.setItem('dropdrive_user_email', data.email);
-                        updateProfilePicture();
-                    }
-                    
-                    DOM.setupModal.classList.add('hidden');
-                    updateSystemStatus('connected');
-                    triggerConfetti();
-                    showToast(t.connectedSuccess, "success");
-                    loadCurrentFolder();
-                } else {
-                    throw new Error("Invalid response");
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: 'test' })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                State.gasUrl = url;
+                localStorage.setItem('dropdrive_url', url);
+                
+                if (data.email) {
+                    State.userEmail = data.email;
+                    localStorage.setItem('dropdrive_user_email', data.email);
+                    updateProfilePicture();
                 }
-            })
-            .catch(err => {
-                updateSystemStatus('disconnected');
-                showToast(t.connectionFailed, "error");
-            })
-            .finally(() => {
-                btn.innerHTML = `<span data-i18n="saveAndConnect">${t.saveAndConnect}</span>`;
-                btn.disabled = false;
-            });
+                
+                DOM.setupModal.classList.add('hidden');
+                updateSystemStatus('connected');
+                triggerConfetti();
+                showToast(t.connectedSuccess, "success");
+                loadCurrentFolder();
+            } else {
+                throw new Error(data.error || "Invalid response");
+            }
+        })
+        .catch(err => {
+            console.error("API Connection Error:", err);
+            updateSystemStatus('disconnected');
+            showToast(t.connectionFailed, "error");
+        })
+        .finally(() => {
+            btn.innerHTML = `<span data-i18n="saveAndConnect">${t.saveAndConnect}</span>`;
+            btn.disabled = false;
+        });
         }
 
         function showSettingsModal() {
